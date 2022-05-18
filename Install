@@ -1,0 +1,25 @@
+#!/bin/bash
+# Ask user for login details
+
+#install s3fs
+
+sudo apt install s3fs
+
+sudo touch /etc/passwd-s3fs
+
+read -p 'Enter name of s3 bucket: ' bucketvar
+read -p 'Enter AWS user key name: ' keynamevar
+read -p 'Enter AWS user key value: ' keyvalvar
+
+echo
+echo $keynamevar:$keyvalvar > /etc/passwd-s3fs
+sudo chmod 640 /etc/passwd-s3fs
+
+sudo mkdir -p /s3/s3-bucket
+
+sudo s3fs -o allow_other $bucketvar /s3/s3-bucket
+
+wget https://downloads.plex.tv/plex-media-server-new/1.26.1.5798-99a4a6ac9/debian/plexmediaserver_1.26.1.5798-99a4a6ac9_amd64.deb
+
+sudo dpkg -i plexmediaserver_1.26.1.5798-99a4a6ac9_amd64.deb
+echo Your S3 bucket is now mounted and Your new plex server is not installed. Since this is a headless server and plex needs you to first do setup at localhost:32400/web.... use 'ssh username@ip_of_server -L 32400:localhost:32400 -N'. you can then go to http://localhost:32400/web and do the configuration. Your s3 bucket was mounted at /s3/s3-bucket. Good Hacking!!!
